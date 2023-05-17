@@ -1,5 +1,6 @@
 # The Quiz and Question classes define a particular quiz
 import datetime
+import sys
 
 
 class Quiz:
@@ -20,13 +21,13 @@ class Quiz:
         print(f"TOTAL POINTS: {self.total_points}")
         print("*******************************************\n")
 
-    def print_results(self, quiz_taker):
-        print("*******************************************")
-        print(f"RESULTS FOR {quiz_taker}")
-        print(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        print(f"QUESTIONS: {self.correct_count} out of {len(self.questions)} correct.")
-        print(f"SCORE: {self.score} points out of possible {self.total_points}")
-        print("*******************************************\n")
+    def print_results(self, quiz_taker, file=sys.stdout):
+        print("*******************************************", file=file, flush=True)
+        print(f"RESULTS FOR {quiz_taker}", file=file, flush=True)
+        print(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", file=file, flush=True)
+        print(f"QUESTIONS: {self.correct_count} out of {len(self.questions)} correct.", file=file, flush=True)
+        print(f"SCORE: {self.score} points out of possible {self.total_points}", file=file, flush=True)
+        print("*******************************************\n", file=file, flush=True)
 
     def take_quiz(self):
         # Initialize the quiz state

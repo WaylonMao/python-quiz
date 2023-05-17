@@ -76,6 +76,10 @@ class QuizApp:
                     self.qm.take_quiz(quiznum, self.username)
                     self.qm.print_results()
                     print("--------------------------------\n")
+                    do_save = input("Would you like to save your results? (Y/N) ")
+                    do_save = do_save.capitalize()
+                    if len(do_save) > 0 and do_save[0] == "Y":
+                        self.qm.save_results()
                     continue
                 except:
                     self.menu_error()
