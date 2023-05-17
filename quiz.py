@@ -1,5 +1,51 @@
 # The Quiz and Question classes define a particular quiz
 
+
+class Quiz:
+    def __init__(self):
+        self.name = ""
+        self.description = ""
+        self.questions: [Question] = []
+        self.score = 0
+        self.correct_count = 0
+        self.total_points = 0
+
+    def print_header(self):
+        print("\n\n*******************************************")
+        # Print the quiz header
+        print(f"QUIZ NAME: {self.name}")
+        print(f"DESCRIPTION: {self.description}")
+        print(f"QUESTIONS: {len(self.questions)}")
+        print(f"TOTAL POINTS: {self.total_points}")
+        print("*******************************************\n")
+
+    def print_results(self):
+        print("*******************************************")
+
+        print("*******************************************\n")
+
+    def take_quiz(self):
+        # Initialize the quiz state
+        self.score = 0
+        self.correct_count = 0
+        for q in self.questions:
+            q.is_correct = False
+
+        # Print the header
+        self.print_header()
+
+        # Execute each question and record the result
+        for q in self.questions:
+            q.ask()
+            if q.is_correct:
+                self.correct_count += 1
+                self.score += q.points
+            print("------------------------------------------------\n")
+
+        # Return the results
+        return (self.score, self.correct_count, self.total_points)
+
+
 class Question:
     def __init__(self):
         self.points = 0
@@ -71,14 +117,18 @@ class Answer:
         self.text = ""
         self.name = ""
 
-
 # Following part is for testing
 # if __name__ == "__main__":
+#     qz = Quiz()
+#     qz.name = "Sample Quiz"
+#     qz.description = "This is a sample quiz!"
+#
 #     q1 = QuestionTF()
 #     q1.text = "Broccoli is good for you"
 #     q1.points = 5
 #     q1.correct_answer = "t"
-#     q1.ask()
+#     qz.questions.append(q1)
+#
 #     q2 = QuestionMC()
 #     q2.text = "What is 2+2?"
 #     q2.points = 10
@@ -95,7 +145,8 @@ class Answer:
 #     ans.name = "c"
 #     ans.text = "5"
 #     q2.answers.append(ans)
-#     q2.ask()
+#     qz.questions.append(q2)
 #
-#     print(q1.is_correct)
-#     print(q2.is_correct)
+#     qz.total_points = q1.points + q2.points
+#     result = qz.take_quiz()
+#     print(result)
