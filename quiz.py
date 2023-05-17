@@ -1,6 +1,7 @@
 # The Quiz and Question classes define a particular quiz
 import datetime
 import sys
+import random
 
 
 class Quiz:
@@ -11,6 +12,7 @@ class Quiz:
         self.score = 0
         self.correct_count = 0
         self.total_points = 0
+        self.completion_time = 0
 
     def print_header(self):
         print("\n\n*******************************************")
@@ -25,6 +27,7 @@ class Quiz:
         print("*******************************************", file=file, flush=True)
         print(f"RESULTS FOR {quiz_taker}", file=file, flush=True)
         print(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", file=file, flush=True)
+        print(f"TIME TO COMPLETE: {str(self.completion_time)}", file=file, flush=True)
         print(f"QUESTIONS: {self.correct_count} out of {len(self.questions)} correct.", file=file, flush=True)
         print(f"SCORE: {self.score} points out of possible {self.total_points}", file=file, flush=True)
         print("*******************************************\n", file=file, flush=True)
@@ -33,11 +36,19 @@ class Quiz:
         # Initialize the quiz state
         self.score = 0
         self.correct_count = 0
+        self.completion_time = 0
+
         for q in self.questions:
             q.is_correct = False
 
         # Print the header
         self.print_header()
+
+        # Randomize the questions
+        random.shuffle(self.questions)
+
+        # Record the start time of quiz
+        start_time = datetime.datetime.now()
 
         # Execute each question and record the result
         for q in self.questions:
@@ -46,6 +57,49 @@ class Quiz:
                 self.correct_count += 1
                 self.score += q.points
             print("--------------------------------\n")
+
+        # Record the end time of the quiz
+        end_time = datetime.datetime.now()
+
+        # Ask the use if they want to review the quiz
+        response = input("Would you like to review the quiz? (Y/N) ")
+        print("--------------------------------\n")
+        if len(response) != 0 and response[0].upper() == "Y":
+            for q in self.questions:
+                print(f"Question: {q.text}")
+                if type(q) == QuestionMC:
+                    for answer in q.answers:
+                        if answer.name == q.response:
+                            print("-> ", end="")
+                        else:
+                            print("   ", end="")
+                        if answer.name == q.correct_answer:
+                            print(f"{answer.name}) {answer.text} (Correct)")
+                        else:
+                            print(f"{answer.name}) {answer.text}")
+                else:
+                    print(f"Correct Answer: ", end="")
+                    if q.correct_answer == 't':
+                        print("True")
+                    else:
+                        print("False")
+                    print(f"Your Answer: ", end="")
+                    if q.response == 't':
+                        print("True")
+                    else:
+                        print("False")
+                print(f"Points: {q.points}")
+                if q.is_correct:
+                    print("Correct!")
+                else:
+                    print("Incorrect!")
+                print("--------------------------------\n")
+                next = input("Press Enter key to continue...")
+                print("--------------------------------\n")
+
+        # Calculate the time to complete the quiz
+        self.completion_time = end_time - start_time
+        self.completion_time = datetime.timedelta(seconds=round(self.completion_time.total_seconds()))
 
         # Return the results
         return (self.score, self.correct_count, self.total_points)
@@ -57,6 +111,7 @@ class Question:
         self.correct_answer = ""
         self.text = ""
         self.is_correct = False
+        self.response = ""
 
 
 class QuestionTF(Question):
@@ -79,6 +134,8 @@ class QuestionTF(Question):
                 print("Sorry, that's not a valid response. Please try again")
                 continue
 
+            self.response = response[0].lower()
+
             # Mark this question as correct if answered correctly
             if response[0] == self.correct_answer:
                 self.is_correct = True
@@ -91,7 +148,7 @@ class QuestionMC(Question):
         self.answers = []
 
     def ask(self):
-        while (True):
+        while True:
             # Present the question and possible answers
             print(self.text)
             for a in self.answers:
@@ -109,6 +166,8 @@ class QuestionMC(Question):
             if response not in valid_responses:
                 print("Sorry, that's not a valid response. Please try again")
                 continue
+
+            self.response = response[0].lower()
 
             # Mark this question as correct if answered correctly
             if response[0] == self.correct_answer:

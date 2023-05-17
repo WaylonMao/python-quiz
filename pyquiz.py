@@ -32,7 +32,6 @@ class QuizApp:
     def menu_header(self):
         print("--------------------------------")
         print("Please make a selection:")
-        print("(M): Repeat this menu")
         print("(L): List quizzes")
         print("(T): Take a quiz")
         print("(E): Exit program")
@@ -46,12 +45,12 @@ class QuizApp:
         print("-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~-~")
 
     def menu(self):
-        self.menu_header()
 
         # get the user's selection and act on it. This loop will
         # run until the user exits the app
         selection = ""
         while True:
+            self.menu_header()
             selection = input("Selection: ")
 
             if len(selection) == 0:
@@ -59,9 +58,6 @@ class QuizApp:
             elif selection[0].upper() == "E":
                 self.goodbye()
                 break
-            elif selection[0].upper() == "M":
-                self.menu_header()
-                continue
             elif selection[0].upper() == "L":
                 print("\nAvailable Quizzes Are: ")
                 # List quizzes
@@ -70,6 +66,7 @@ class QuizApp:
                 continue
             elif selection[0].upper() == "T":
                 try:
+                    self.qm.list_quizzes()
                     quiznum = int(input("Enter the quiz number: "))
                     print(f"\nYou have selected quiz number {quiznum}")
                     # Take quiz
