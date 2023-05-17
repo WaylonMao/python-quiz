@@ -1,6 +1,12 @@
+from quizmanager import QuizManager
+
+
 class QuizApp:
+    QUIZ_FOLDER = "Quizzes"
+
     def __init__(self):
         self.username = ""
+        self.qm = QuizManager(self.QUIZ_FOLDER)
 
     def startup(self):
         # print the greeting at startup
@@ -58,14 +64,17 @@ class QuizApp:
                 continue
             elif selection[0].upper() == "L":
                 print("\nAvailable Quizzes Are: ")
-                # TODO: list quizzes
+                # List quizzes
+                self.qm.list_quizzes()
                 print("--------------------------------\n")
                 continue
             elif selection[0].upper() == "T":
                 try:
                     quiznum = int(input("Enter the quiz number: "))
                     print(f"\nYou have selected quiz number {quiznum}")
-                    # TODO: take quiz
+                    # Take quiz
+                    self.qm.take_quiz(quiznum, self.username)
+                    self.qm.print_results()
                     print("--------------------------------\n")
                     continue
                 except:

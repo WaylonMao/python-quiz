@@ -1,4 +1,5 @@
 # The Quiz and Question classes define a particular quiz
+import datetime
 
 
 class Quiz:
@@ -19,9 +20,12 @@ class Quiz:
         print(f"TOTAL POINTS: {self.total_points}")
         print("*******************************************\n")
 
-    def print_results(self):
+    def print_results(self, quiz_taker):
         print("*******************************************")
-
+        print(f"RESULTS FOR {quiz_taker}")
+        print(f"Date: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        print(f"QUESTIONS: {self.correct_count} out of {len(self.questions)} correct.")
+        print(f"SCORE: {self.score} points out of possible {self.total_points}")
         print("*******************************************\n")
 
     def take_quiz(self):
@@ -40,7 +44,7 @@ class Quiz:
             if q.is_correct:
                 self.correct_count += 1
                 self.score += q.points
-            print("------------------------------------------------\n")
+            print("--------------------------------\n")
 
         # Return the results
         return (self.score, self.correct_count, self.total_points)

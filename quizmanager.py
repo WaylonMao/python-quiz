@@ -43,18 +43,19 @@ class QuizManager:
 
     # start the given quiz for the user and return the results
     def take_quiz(self, quizid, username):
-        pass
+        self.quiz_taker = username
+        self.the_quiz = self.quizzes[quizid]
+        self.results = self.the_quiz.take_quiz()
 
     # prints the results of the most recently taken quiz
     def print_results(self):
-        pass
+        self.the_quiz.print_results(self.quiz_taker)
 
     # save the results of the most recent quiz to a file
     # the file is named using the current date as
     # QuizResults_YYYY_MM_DD_N (N is incremented until unique)
     def save_results(self):
         pass
-
 
 # Following is for testing.
 # if __name__ == "__main__":
